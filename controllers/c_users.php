@@ -65,7 +65,8 @@ class users_controller extends base_controller {
                 
                 # Success
                 if($token) {
-                        setcookie('token',$token, strtotime('+1 year'), '/');
+                		# cookie exists for up to one year, accessible to all in domain
+                        setcookie('token',$token, strtotime('+1 year'), '/'); 
                         echo "You are logged in!";
                 }
                 # Fail
