@@ -13,9 +13,9 @@
 
 /* BASICS */
 body {  
-        font: 9pt/16pt Georgia, Times New Roman, Times, serif; 
+        font: 9pt/16pt Arial, Helvetica, sans-serif; 
         color: #010E22; 
-        background: #F5F5E9 url(/images/pattern.gif) repeat; 
+        background: #F5F5E9 url(/images/pattern_140.gif) repeat; 
         margin: 0px;
         border: 0px;
         padding: 0px;
@@ -42,7 +42,7 @@ a:hover, a:active {
         text-decoration: underline; 
         color: #010E22;
         }
-        
+    
 
 /* LAYOUT */
 .page-wrapper { 
@@ -51,7 +51,7 @@ a:hover, a:active {
         background: #fff url(teacup.jpg) no-repeat top left;
         margin: 10px auto;
         border: 10px solid #C7CDD8;
-        padding: 0px;
+        padding: 20px;
         width: 760px; 
         voice-family: "\"}\"";
         voice-family: inherit;
@@ -59,6 +59,17 @@ a:hover, a:active {
         }
         html>body .page-wrapper {
         width: 740px;
+}
+.contentside {
+        position: absolute;
+        top: 100px;
+        left: 200px;
+        }
+#div1 {  
+    visibility: hidden;  
+}
+#div1:hover, #div2:hover, #div3:hover{  
+    display:block;  
 }
 
 

@@ -22,6 +22,8 @@ class users_controller extends base_controller {
     
     public function p_signup() {
                         
+            $_POST = DB::instance(DB_NAME)->sanitize($_POST);
+            
             $_POST['created']  = Time::now();
             $_POST['modified'] = Time::now();
             $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
@@ -72,7 +74,7 @@ class users_controller extends base_controller {
                         //echo $q;
            
                 $token = DB::instance(DB_NAME)->select_field($q);
-                
+                $this->user->avatar = "/";
 			    # Login failed
 			    if(!$token) {
 			        # Note the addition of the parameter "error"
@@ -104,44 +106,50 @@ class users_controller extends base_controller {
 	    Router::redirect("/");
 	
 	}
+	public function profile() {
 	
-    public function oldprofile($user_name=NULL) {
-                
-                # Set up the View
-                # this creates an instance of the master template: $template=View::('_v_template'); but this ALREADY set up in base controller! So we do this which loads an instance of the profile for insertion into the master template (set to content):
-                $this->template->content = View::instance('v_users_profile');
-                
-                #Pass data to the view
-                $this->template->content->user_name = $user_name;
-                $this->template->title = "Profile";
-                               
-                # Load client files
-                $client_files_head = Array(
-                        '/css/profile.css',
-                        );
-                
-                # what this does is take the array contained in $client_files_head and puts the surrounding <link or script> stuff.
-                $this->template->client_files_head = Utils::load_client_files($client_files_head);
-                
-                $client_files_body = Array(
-                        '/js/profile.js'
-                        );
-                
-                $this->template->client_files_body = Utils::load_client_files($client_files_body);
-                
-                $q = "SELECT * FROM users WHERE first_name = 'Jackie'";
-                echo $q;
-                
-                # Pass the data to the View
-                $this->template->content->user_name = $user_name;
-                
-                # Display the view
-                echo $this->template;
-                        
-                //$view = View::instance('v_users_profile');
-                //$view->user_name = $user_name;                
-                //echo $view;
-                
-    }
+	    # If user is blank, they're not logged in; redirect them to the login page
+	    if(!$this->user) {
+	        Router::redirect('/users/login');
+	    }
+	
+	    # If they weren't redirected away, continue:
+		$q = 'SELECT 
+		            *
+		        FROM profiles
+		        WHERE user_id = '.$this->user->user_id;	
+		echo $q;
+		
+		$profile = DB::instance(DB_NAME)->select_rows($q);
+		//echo var_dump($profile);
+		
+	    # Setup view
+	    $this->template->content = View::instance('v_users_profile');
+	    $this->template->title   = "Profile of".$this->user->first_name;
+	    $this->template->content->profile = $profile;
+		
+	    # Render template
+	    echo $this->template;
+	}
+	
+	public function updateprofile() {
+	
+	    # If user is blank, they're not logged in; redirect them to the login page
+	    if(!$this->user) {
+	        Router::redirect('/users/login');
+	    }
+	
+	    # If they weren't redirected away, continue:
+	
+	    # Setup view
+	    $this->template->content = View::instance('v_users_updateprofile');
+	    $this->template->title   = "Profile of".$this->user->first_name;
+	
+	    # Render template
+	    echo $this->template;
+	}
+
+	
+
 
 } # end of the class
