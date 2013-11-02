@@ -37,7 +37,6 @@ class users_controller extends base_controller {
                         
             DB::instance(DB_NAME)->insert_row('users', $_POST);
             
-            echo 'You\'re signed up';
             
             # Send them to the login page
             Router::redirect('/users/login');
@@ -61,9 +60,6 @@ class users_controller extends base_controller {
                       
                 $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
                 
-                echo "<pre>";
-				print_r($_POST);
-				echo "</pre>";
 
                 $q = 
                         'SELECT token 
