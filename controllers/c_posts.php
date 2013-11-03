@@ -130,7 +130,7 @@ class posts_controller extends base_controller {
         DB::instance(DB_NAME)->insert('posts', $_POST);
 
         # Quick and dirty feedback
-        Router::redirect("/posts/index/added");
+        Router::redirect("/posts/index");
 
     }
 }
