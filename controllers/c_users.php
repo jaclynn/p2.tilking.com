@@ -125,18 +125,26 @@ class users_controller extends base_controller {
 	    Router::redirect("/");
 	
 	}
-	public function profile() {
+	public function profile($selectfriend=NULL) {
 	
 	    # If user is blank, they're not logged in; redirect them to the login page
 	    if(!$this->user) {
 	        Router::redirect('/users/login');
 	    }
-	
+		
+		if (isset($selectfriend)) {
+			$searchuserid = $selectfriend;
+		} else {
+			$searchuserid = $this->user->user_id;
+		}
+		
 	    # If they weren't redirected away, continue:
 		$q = 'SELECT 
 		            *
 		        FROM profiles
-		        WHERE user_id = '.$this->user->user_id;	
+		        INNER JOIN users ON
+		         profiles.user_id = users.user_id
+		        WHERE profiles.user_id = '.$searchuserid;	
 		//echo $q;
 		
 		$profile = DB::instance(DB_NAME)->select_rows($q);
@@ -144,7 +152,7 @@ class users_controller extends base_controller {
 		
 	    # Setup view
 	    $this->template->content = View::instance('v_users_profile');
-	    $this->template->title   = "Profile of ".$this->user->first_name;
+	    $this->template->title   = "Profile of ".$profile[0]['city'];
 	    $this->template->content->profile = $profile;
 	    
 		
@@ -241,21 +249,23 @@ class users_controller extends base_controller {
 				        $image = imagecreatefromgif(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 				        break;
 				}
+			  // Used GD library stuff to get the resize to work right, and it still isn't perfect
 		      $oldw = imagesx($image);
 		      $oldh = imagesy($image);
 		      $newimage = imagecreatetruecolor(200,200);
 		      imagecopyresampled($newimage, $image, 0, 0, 0, 0, 200, 200, $oldw, $oldh);
 		      
-		      
+		      $smallimagepath = APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension;
+		      if (file_exists($smallimagepath)) { unlink ($smallimagepath);}
 		      switch ($extension) {
-				    case 'png':
-				        imagepng($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				    case 'png':				    	
+				        imagepng($newimage, $smallimagepath);
 				        break;
 				    case 'jpg':
-				        imagejpeg($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				        imagejpeg($newimage, $smallimagepath);
 				        break;
 				    case 'gif':
-				        imagegif($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				        imagegif($newimage, $smallimagepath);
 				        break;
 				}
 		      }

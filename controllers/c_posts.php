@@ -16,8 +16,9 @@ class posts_controller extends base_controller {
 	    $this->template->content = View::instance('v_posts_index');
 	    $this->template->title   = "Posts";
 	
-	    # Build the query
-		$q = 'SELECT 
+	    # Build the query 
+	    # Added DISTINCT so I could add the OR and include the user's own posts. Also sorted by newest
+		$q = 'SELECT DISTINCT
 		            posts.content,
 		            posts.created,
 		            posts.user_id AS post_user_id,
@@ -26,10 +27,11 @@ class posts_controller extends base_controller {
 		            users.last_name
 		        FROM posts
 		        INNER JOIN users_users 
-		            ON posts.user_id = users_users.user_id_followed
+		            ON posts.user_id = users_users.user_id_followed		
+		            OR posts.user_id = users_users.user_id            
 		        INNER JOIN users 
 		            ON posts.user_id = users.user_id
-		        WHERE users_users.user_id = '.$this->user->user_id;	
+		        WHERE users_users.user_id = '.$this->user->user_id.' ORDER BY posts.created DESC';
 	    # Run the query
 	    $posts = DB::instance(DB_NAME)->select_rows($q);
 	
@@ -106,7 +108,8 @@ class posts_controller extends base_controller {
         # Setup view
         $this->template->content = View::instance('v_posts_add');
         $this->template->title   = "New Post";
-
+		
+		
         # Render template
         echo $this->template;
 
@@ -126,7 +129,7 @@ class posts_controller extends base_controller {
         DB::instance(DB_NAME)->insert('posts', $_POST);
 
         # Quick and dirty feedback
-        echo "Your post has been added. <a href='/posts/add'>Add another</a>";
+        Router::redirect("/posts/index/added");
 
     }
 }

@@ -15,17 +15,11 @@
 body {  
         font: 9pt/16pt Arial, Helvetica, sans-serif; 
         color: #010E22; 
-        background: #F5F5E9 url(/images/pattern_140.gif) repeat; 
+        background: #F5F5E9 url(/images/pattern_089.gif) repeat; 
         margin: 0px;
         border: 0px;
         padding: 0px;
         text-align: center;
-        }
-p { 
-        font: 9pt/16pt Georgia, Times New Roman, Times, serif; 
-        margin-top: 0px; 
-        text-align: left;
-        color: #010E22;
         }
 
 a:link { 
@@ -54,18 +48,40 @@ a:hover, a:active {
         padding: 20px;
         width: 760px; 
         width: 740px;
+        height: 1000px;
         }
         html>body .page-wrapper {
         width: 740px;
 }
 .contentside {
         position: absolute;
-        top: 100px;
+        top: 120px;
         left: 250px;
         }
 
 .error {
 	color:#FF0000;
+}
+fieldset {
+	width: 400px;
+	padding: 5px;
+}
+legend {
+	font-size:16px;
+}
+label.field {
+	text-align:left;
+	width: 100px;
+	float: left;
+	font-weight:bold;
+}
+input text,password{
+	width:300px;
+	float:left;
+}
+fieldset p {
+	clear:both;
+	padding:5px;
 }
 
 

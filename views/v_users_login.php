@@ -7,10 +7,11 @@
         </div>
         <br>
     <?php endif; ?>
-
-Email: <input type='text' name='email'/><br/>
-Password: <input type='password' name='password'/><br/>
-
-<input type='submit' value='Login'/>
-
+	<fieldset>
+		<legend>Enter your credentials</legend>
+		<p><label class="field" for="email">Email:</label> <input type='text' name='email'/></p>
+		<p><label class="field" for="password">Pasword:</label> <input type='password' name='password'/></p>
+		
+		<input type='submit' value='Login'/>
+	</fieldset>
 </form>
