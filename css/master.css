@@ -13,7 +13,7 @@
 
 /* BASICS */
 body {  
-        font: 9pt/16pt Arial, Helvetica, sans-serif; 
+        font: 12pt/16pt Arial, Helvetica, sans-serif; 
         color: #010E22; 
         background: #F5F5E9 url(/images/pattern_089.gif) repeat; 
         margin: 0px;
@@ -84,7 +84,7 @@ fieldset p {
 	padding:5px;
 }
 
-
+/*
 .intro { 
         background: url(leaves_neu.gif) no-repeat top right;
         margin: 0px;
@@ -120,7 +120,7 @@ header h2 {
         overflow: hidden;
         }
         
-/* CONTENT */
+
 .summary {
         position: absolute;
         top: 320px;
@@ -162,7 +162,7 @@ header h2 {
         width: 450px;
         }
         
-/* LINKS */        
+       
 .sidebar {
         position: absolute;
         top: 520px;
@@ -233,7 +233,7 @@ header h2 {
         font-weight: normal;
          }
         
-/* FOOTER */
+
 footer { 
         position: absolute;
         top: 10px;
@@ -244,7 +244,7 @@ footer a:link, footer a:visited {
         margin-right: 10px; 
         }        
 
-/* HEADLINES */
+
 h3 { 
         text-align: left;
         margin-bottom: 0px; 
@@ -278,4 +278,4 @@ h3 {
 .requirements h3 { 
         background: transparent url(h3_d.gif) no-repeat top left;
         }
-        
+       */

@@ -34,7 +34,7 @@ class users_controller extends base_controller {
 			}
 			else {
 			
-				unset($_POST['pass2']);
+				unset($_POST['pass2']); // Get rid of pass2 before it goes to DB
 				
 				$_POST['created']  = Time::now();
 	            $_POST['modified'] = Time::now();
@@ -69,6 +69,9 @@ class users_controller extends base_controller {
     }
 
     public function login($error=NULL) {
+    	    if($this->user) {
+		        Router::redirect('/');
+		    }
     
             $this->template->content = View::instance('v_users_login');    
                
@@ -203,6 +206,7 @@ class users_controller extends base_controller {
 		
 	}
 	
+	/* This is for the setavatar form on the updateprofile page. I use the GD library to manipulate image for use as avatar */
 	public function p_setavatar() {
 		
 		$allowedExts = array("gif", "jpg", "png");
@@ -225,18 +229,17 @@ class users_controller extends base_controller {
 		    }
 		  else
 		    {
-		    /*
+		    /* 
 		    echo "Upload: " . $_FILES["avatar"]["name"] . "<br>";
 		    echo "Type: " . $_FILES["avatar"]["type"] . "<br>";
 		    echo "Size: " . ($_FILES["avatar"]["size"] / 1024) . " kB<br>";
 		    echo "Temp file: " . $_FILES["avatar"]["tmp_name"] . "<br>";
-			*/
-		    if (file_exists(APP_PATH.AVATAR_PATH. $_FILES["avatar"]["name"]))
-		      {
+			
+		      { //DECIDED NOT TO CHECK FOR DUPLICATE
 		      //echo $_FILES["avatar"]["name"] . " already exists. ";
 		      }
 		    else
-		      {
+		      { */
 		      copy($_FILES["avatar"]["tmp_name"],
 		      APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 		      //echo "Stored in: " . APP_PATH.'uploads/avatars/'. $_FILES["avatar"]["name"];
@@ -250,7 +253,7 @@ class users_controller extends base_controller {
 				    case 'gif':
 				        $image = imagecreatefromgif(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 				        break;
-				}
+				} //end switch
 			  // Used GD library stuff to get the resize to work right, and it still isn't perfect
 		      $oldw = imagesx($image);
 		      $oldh = imagesy($image);
@@ -269,10 +272,10 @@ class users_controller extends base_controller {
 				    case 'gif':
 				        imagegif($newimage, $smallimagepath);
 				        break;
-				}
-		      }
-		    }
-		  }
+				} //end switch
+		      
+		    } //end else
+		  } //big if
 		else
 		  {
 		  Router::redirect("/users/updateprofile/error");
