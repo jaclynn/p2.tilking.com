@@ -9,11 +9,11 @@ class users_controller extends base_controller {
         echo "This is the index page";
     }
 
-    public function signup() {
+    public function signup($error = NULL) {
        
        # Set up the view
        $this->template->content = View::instance('v_users_signup');
-       
+       $this->template->content->error = $error;
        
        # Render the view
        echo $this->template;
@@ -24,23 +24,46 @@ class users_controller extends base_controller {
                         
             $_POST = DB::instance(DB_NAME)->sanitize($_POST);
             
-            $_POST['created']  = Time::now();
-            $_POST['modified'] = Time::now();
-            $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
-            $_POST['token']    = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+
             
-            /*
-            echo "<pre>";
-            print_r($_POST);
-            echo "<pre>";
-            */
-                        
-            DB::instance(DB_NAME)->insert_row('users', $_POST);
-            
-            
-            # Send them to the login page
-            Router::redirect('/users/login');
-            
+            if ($_POST['password']!= $_POST['pass2'])
+			{
+				
+				Router::redirect("/users/signup/error");
+			}
+			else {
+			
+				unset($_POST['pass2']);
+				
+				$_POST['created']  = Time::now();
+	            $_POST['modified'] = Time::now();
+	            $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
+	            $_POST['token']    = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+	            /*
+	            echo "<pre>";
+	            print_r($_POST);
+	            echo "<pre>";
+	            */
+	                       
+	            DB::instance(DB_NAME)->insert_row('users', $_POST);
+	            $q='SELECT user_id FROM users WHERE email="'.$_POST['email'].'"';
+	            
+	            
+	            $userid = DB::instance(DB_NAME)->select_field($q); 
+	            $geolocation = Geolocate::locate();
+				$newprofile = array('user_id' => $userid,
+									'city' => $geolocation['city'],
+									'state' => $geolocation['state'],
+									'created' => $_POST['created'],
+									'modified' => $_POST['modified']
+									);
+				
+					
+	            DB::instance(DB_NAME)->insert_row('profiles', $newprofile);
+	            # Send them to the login page
+	           
+				Router::redirect('/users/login');
+            }
             
     }
 
@@ -70,7 +93,7 @@ class users_controller extends base_controller {
                         //echo $q;
            
                 $token = DB::instance(DB_NAME)->select_field($q);
-                $this->user->avatar = "/";
+                
 			    # Login failed
 			    if(!$token) {
 			        # Note the addition of the parameter "error"
@@ -114,21 +137,22 @@ class users_controller extends base_controller {
 		            *
 		        FROM profiles
 		        WHERE user_id = '.$this->user->user_id;	
-		echo $q;
+		//echo $q;
 		
 		$profile = DB::instance(DB_NAME)->select_rows($q);
 		//echo var_dump($profile);
 		
 	    # Setup view
 	    $this->template->content = View::instance('v_users_profile');
-	    $this->template->title   = "Profile of".$this->user->first_name;
+	    $this->template->title   = "Profile of ".$this->user->first_name;
 	    $this->template->content->profile = $profile;
+	    
 		
 	    # Render template
 	    echo $this->template;
 	}
 	
-	public function updateprofile() {
+	public function updateprofile($error=NULL) {
 	
 	    # If user is blank, they're not logged in; redirect them to the login page
 	    if(!$this->user) {
@@ -136,13 +160,90 @@ class users_controller extends base_controller {
 	    }
 	
 	    # If they weren't redirected away, continue:
-	
+		$q = 'SELECT 
+		            *
+		        FROM profiles
+		        WHERE user_id = '.$this->user->user_id;	
+		//echo $q;
+		
+		$profile = DB::instance(DB_NAME)->select_rows($q);
 	    # Setup view
 	    $this->template->content = View::instance('v_users_updateprofile');
-	    $this->template->title   = "Profile of".$this->user->first_name;
+	    $this->template->title   = "Profile of ".$this->user->first_name;
+	    $this->template->content->error = $error;
+	    $this->template->content->profile = $profile;
 	
 	    # Render template
 	    echo $this->template;
+	}
+	public function p_updateprofile() {
+		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
+						
+        $_POST['modified'] = Time::now();
+        
+        /*
+        echo "<pre>";
+        print_r($_POST);
+        echo "<pre>";
+        */
+                   
+        DB::instance(DB_NAME)->update("profiles", $_POST, "WHERE user_id = '".$this->user->user_id."'");
+		Router::redirect("/users/profile");
+		
+	}
+	
+	public function p_setavatar() {
+		
+		$allowedExts = array("gif", "jpeg", "jpg", "png");
+		
+		$temp = explode(".", $_FILES["avatar"]["name"]);
+		$extension = end($temp);
+		
+		if ((($_FILES["avatar"]["type"] == "image/gif")
+		|| ($_FILES["avatar"]["type"] == "image/jpeg")
+		|| ($_FILES["avatar"]["type"] == "image/jpg")
+		|| ($_FILES["avatar"]["type"] == "image/pjpeg")
+		|| ($_FILES["avatar"]["type"] == "image/x-png")
+		|| ($_FILES["avatar"]["type"] == "image/png"))
+		//&& ($_FILES["file"]["size"] < 20000)
+		&& in_array($extension, $allowedExts))
+		  {
+		  if ($_FILES["avatar"]["error"] > 0)
+		    {
+		    //echo "Return Code: " . $_FILES["avatar"]["error"] . "<br>";
+		    }
+		  else
+		    {
+		    /*
+		    echo "Upload: " . $_FILES["avatar"]["name"] . "<br>";
+		    echo "Type: " . $_FILES["avatar"]["type"] . "<br>";
+		    echo "Size: " . ($_FILES["avatar"]["size"] / 1024) . " kB<br>";
+		    echo "Temp file: " . $_FILES["avatar"]["tmp_name"] . "<br>";
+			*/
+		    if (file_exists(APP_PATH.AVATAR_PATH. $_FILES["avatar"]["name"]))
+		      {
+		      //echo $_FILES["avatar"]["name"] . " already exists. ";
+		      }
+		    else
+		      {
+		      move_uploaded_file($_FILES["avatar"]["tmp_name"],
+		      APP_PATH.'uploads/avatars/'.$_FILES["avatar"]["name"]);
+		      //echo "Stored in: " . APP_PATH.'uploads/avatars/'. $_FILES["avatar"]["name"];
+		      
+		      }
+		    }
+		  }
+		else
+		  {
+		  Router::redirect("/users/updateprofile/error");
+		  }
+		  $data = Array("avatar" => '/uploads/avatars/'.$_FILES["avatar"]["name"]);
+		  DB::instance(DB_NAME)->update("profiles", $data, "WHERE user_id = '".$this->user->user_id."'");
+		  Router::redirect("/users/updateprofile");
+		//file_put_contents(APP_PATH.AVATAR_PATH.$_POST['avatar'], )
+		
+		
+			
 	}
 
 	

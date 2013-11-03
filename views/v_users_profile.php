@@ -1,17 +1,19 @@
 
 <h1>This is the profile of <?=$user->first_name?></h1>
-<img src='<?=$user->avatar_small?>' /><br/>
+
+<?php foreach($profile as $currentuser): ?>
+<img src='<?=$currentuser['avatar']?>' /><br/>
 	<?=$user->first_name?>&#160;<?=$user->last_name?><br/>
-	<a href="mailto:<?=$user->email?>"><?=$user->email?></a><br/>
-	<a href="/users/updateaccount">Update Account Info</a>
+	<a href="mailto:<?=$user->email?>"><?=$user->email?></a><br/><br/><br/>
+	<a href="/users/updateprofile">Update Profile Info</a>
 	<br/><br/>
 
 <div class="contentside">
 <article>
 <br/><br/>
-<?php foreach($profile as $currentuser): ?>
+
 Gender: <?=$currentuser['gender']?><br/>
-Married <?=$currentuser['married']?><br/>
+Married: <?=$currentuser['married']?><br/>
 Location: 
 <?=$currentuser['city']?>,&#160;
 <?=$currentuser['state']?><br/>

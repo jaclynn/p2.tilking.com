@@ -49,5 +49,5 @@ A email designated to receive messages from the server. Examples:
 # Added this to overwrite the ones from core.
 	define('SMALL_W', 100);
 	define('SMALL_H', 100);
-	define('AVATAR_PATH', "/uploads/avatars/");
+	define('AVATAR_PATH', "uploads/avatars/");
 	define('PLACE_HOLDER_IMAGE', "/images/placeholder.png");

@@ -1,28 +1,36 @@
 
 <h1>This is the profile of <?=$user->first_name?></h1>
-
+    <?php if(isset($error)): ?>
+        <div class='error'>
+            Invalid File. Try again.
+        </div>
+        <br>
+    <?php endif; ?>
 	
-	<img src='<?=$user->avatar_small?>' /><br/>
-	
-	<a href="/users/changeavatar">Change Profile Picture</a>
-	
-	
-	<br/><br/>
-	First  Name: <?=$user->first_name?><br/>
-	Last  Name: <?=$user->last_name?><br/>
-	Email: <?=$user->email?><br/>
-	<a href="/users/updateaccount">Update Account Info</a>
+	<?php foreach($profile as $currentuser): ?>
+	<img src='<?=$currentuser['avatar']?>' /><br/>
+	<form action="/users/p_setavatar" method="post" enctype="multipart/form-data">
+		<input type="file" name="avatar" id="file"><br>
+		<input type="submit" name="submit" value="Change Profile Picture">
+	</form>
+	<?=$user->first_name?>&#160;<?=$user->last_name?><br/>
+	Email: <a href="mailto:<?=$user->email?>"><?=$user->email?></a>
 	<br/><br/>
 		
 	<div class="contentside">
-	<h4>Profile Data:</h4>
 	<form method='POST' action='/users/p_updateprofile'/>
-	Date of Birth: <input type='date'/><br/>
-	Gender: <input type='radio' name='gender' value='MALE'>Male<input type="radio" name="gender" value='FEMALE'>Female<br/>
-	Married: <input type='checkbox' />
-	City: <input type='text' name='location' value='Enter City'/>
-	State: <select name="State">
-		<option value="" selected="selected">Select a State</option>
+
+	<h4>Profile Data:</h4>
+	Last Modified: <?=Time::display($currentuser['modified'],'Y-m-d G:i')?><br/>
+	Date of Birth: <input type='date' name='dob' value=<?=$currentuser['dob']?>/><br/>
+	Gender: <input type='radio' name='gender' value='MALE' <?if($currentuser['gender']=='MALE'):?>checked<?php endif; ?>>Male
+	        <input type="radio" name="gender" value='FEMALE' <?if($currentuser['gender']=='FEMALE'):?>checked<?php endif; ?>>Female<br/>
+	Married: <input type='radio' name='married' value='YES' <?if($currentuser['married']=='YES'):?>checked<?php endif; ?>>Yes
+			 <input type="radio" name="married" value='NO' <?if($currentuser['married']=='NO'):?>checked<?php endif; ?>>No
+			 <input type="radio" name="married" value='NO_ANSWER' <?if($currentuser['married']=='NO_ANSWER'):?>checked<?php endif; ?>>Prefer not to say<br/>
+	City: <input type='text' name='city' value='<?=$currentuser['city']?>'/>
+	State: <select name="state">
+		<option value="" selected="selected"><?=$currentuser['state']?></option>
 		<option value="AL">Alabama</option>
 		<option value="AK">Alaska</option>
 		<option value="AZ">Arizona</option>
@@ -74,7 +82,8 @@
 		<option value="WV">West Virginia</option>
 		<option value="WI">Wisconsin</option>
 		<option value="WY">Wyoming</option>
-	</select><br/>
+	</select><br/><br/>
 	<input type='submit'value='Update Profile'/>
 </form>
+<?php endforeach; ?>
 </div>
