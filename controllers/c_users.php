@@ -40,11 +40,16 @@ class users_controller extends base_controller {
 	            $_POST['modified'] = Time::now();
 	            $_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
 	            $_POST['token']    = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+	            $_POST['first_name'] = strip_tags($_POST['first_name']);
+	            $_POST['last_name'] = strip_tags($_POST['last_name']);
+	            $_POST['email'] = strip_tags($_POST['email']);
+	            
 	            /*
 	            echo "<pre>";
 	            print_r($_POST);
 	            echo "<pre>";
 	            */
+	            
 	                       
 	            DB::instance(DB_NAME)->insert_row('users', $_POST);
 	            $q='SELECT user_id FROM users WHERE email="'.$_POST['email'].'"';
@@ -56,7 +61,8 @@ class users_controller extends base_controller {
 									'city' => $geolocation['city'],
 									'state' => $geolocation['state'],
 									'created' => $_POST['created'],
-									'modified' => $_POST['modified']
+									'modified' => $_POST['modified'],
+									'avatar' => PLACE_HOLDER_IMAGE
 									);
 				
 					
@@ -199,6 +205,7 @@ class users_controller extends base_controller {
 		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 						
         $_POST['modified'] = Time::now();
+        $_POST['city'] = strip_tags($_POST['city']);
         
         /*
         echo "<pre>";
@@ -214,7 +221,7 @@ class users_controller extends base_controller {
 	/* This is for the setavatar form on the updateprofile page. I use the GD library to manipulate image for use as avatar */
 	public function p_setavatar() {
 		
-		$allowedExts = array("gif", "jpg", "png");
+		$allowedExts = array("gif", "jpg", "png", "PNG", "JPG", "GIF");
 		
 		$temp = explode(".", $_FILES["avatar"]["name"]);
 		$extension = end($temp);
@@ -248,14 +255,18 @@ class users_controller extends base_controller {
 		      copy($_FILES["avatar"]["tmp_name"],
 		      APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 		      //echo "Stored in: " . APP_PATH.'uploads/avatars/'. $_FILES["avatar"]["name"];
+		      $extension = strtolower($extension);
 		      switch ($extension) {
 				    case 'png':
+				    case 'PNG':
 				        $image = imagecreatefrompng(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 				        break;
 				    case 'jpg':
+				    case 'JPG':
 				        $image = imagecreatefromjpeg(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 				        break;
 				    case 'gif':
+				    case 'GIF':
 				        $image = imagecreatefromgif(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 				        break;
 				} //end switch

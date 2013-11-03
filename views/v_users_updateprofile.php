@@ -28,6 +28,7 @@
 	<legend>Profile Data:</legend>
 	<p>Last Modified: <time datetime="<?=Time::display($currentuser['modified'],'Y-m-d G:i')?>">
         <?=Time::display($currentuser['modified'])?></time></p>
+    <p>Enter date of birth as (YYYY-MM-DD) if you don't have datepicker</p>
 	<p><label class="field" for="dob">Date of Birth:</label><input type='date' id='dob' name='dob' value='<?=$currentuser['dob']?>'/></p>
 	<p><label class="field" for="gender">Gender:</label>
 			<input type='radio' id='gender' name='gender' value='MALE' <?if($currentuser['gender']=='MALE'):?>checked<?php endif; ?>>Male
