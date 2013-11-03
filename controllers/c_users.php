@@ -13,6 +13,7 @@ class users_controller extends base_controller {
        
        # Set up the view
        $this->template->content = View::instance('v_users_signup');
+       $this->template->content->title = "Sign Up";
        $this->template->content->error = $error;
        
        # Render the view
@@ -72,6 +73,7 @@ class users_controller extends base_controller {
             $this->template->content = View::instance('v_users_login');    
                
             # Pass data to the view
+            $this->template->content->title = "Login";
 			$this->template->content->error = $error;
 
 		    # Render the view
@@ -152,7 +154,7 @@ class users_controller extends base_controller {
 		
 	    # Setup view
 	    $this->template->content = View::instance('v_users_profile');
-	    $this->template->title   = "Profile of ".$profile[0]['city'];
+	    $this->template->title   = "Profile of ".$profile[0]['first_name'];
 	    $this->template->content->profile = $profile;
 	    
 		

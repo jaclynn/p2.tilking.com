@@ -8,7 +8,7 @@
     <?php endif; ?>
 	
 	<?php foreach($profile as $currentuser): ?>
-	<img src='<?=$currentuser['avatar']?>' /><br/>
+	<img src='<?=$currentuser['avatar']?>' alt="profile picture" /><br/>
 	<div class="contentside">
 	<form action="/users/p_setavatar" method="post" enctype="multipart/form-data">
 	<fieldset>
@@ -23,19 +23,19 @@
 	<br/><br/>
 		
 	<div>
-	<form method='POST' action='/users/p_updateprofile'/>
+	<form method='POST' action='/users/p_updateprofile'>
 	<fieldset>
 	<legend>Profile Data:</legend>
-	<p>Last Modified: <time datetime="<?=Time::display($currentuser['modified'],'Y-m-d G:i')?>">
+	<p>Last Modified: <time datetime="<?=Time::display($currentuser['modified'],'Y-m-d G:i')?>"/>
         <?=Time::display($currentuser['modified'])?></p>
-	<p><label class="field" for="dob">Date of Birth:</label><input type='date' name='dob' value=<?=$currentuser['dob']?>/></p>
-	<p><label class="field" for="gender">Gender:</label><input type='radio' name='gender' value='MALE' <?if($currentuser['gender']=='MALE'):?>checked<?php endif; ?>>Male
-	        <input type="radio" name="gender" value='FEMALE' <?if($currentuser['gender']=='FEMALE'):?>checked<?php endif; ?>>Female</p>
+	<p><label class="field" for="dob">Date of Birth:</label><input type='date' id='dob' name='dob' value='<?=$currentuser['dob']?>'/></p>
+	<p><label class="field" for="gender">Gender:</label><input type='radio' id='gender' name='gender' value='MALE' <?if($currentuser['gender']=='MALE'):?>checked<?php endif; ?>>Male
+	        <input type="radio" id='gender' name="gender1" value='FEMALE' <?if($currentuser['gender']=='FEMALE'):?>checked<?php endif; ?>>Female</p>
 	<p><label class="field" for="married">Married:</label><input type='radio' name='married' value='YES' <?if($currentuser['married']=='YES'):?>checked<?php endif; ?>>Yes
-			 <input type="radio" name="married" value='NO' <?if($currentuser['married']=='NO'):?>checked<?php endif; ?>>No
-			 <input type="radio" name="married" value='NO_ANSWER' <?if($currentuser['married']=='NO_ANSWER'):?>checked<?php endif; ?>>Prefer not to say</p>
-	<p><label class="field" for="city">City:</label><input type='text' name='city' value='<?=$currentuser['city']?>'/></p>
-	<p><label class="field" for="state">State:</label><select name="state">
+			 <input type="radio" id='married1' name="married" value='NO' <?if($currentuser['married']=='NO'):?>checked<?php endif; ?>>No
+			 <input type="radio" id='married2' name="married" value='NO_ANSWER' <?if($currentuser['married']=='NO_ANSWER'):?>checked<?php endif; ?>>Prefer not to say</p>
+	<p><label class="field" for="city">City:</label><input type='text' id='city' name='city' value='<?=$currentuser['city']?>'/></p>
+	<p><label class="field" for="state">State:</label><select id='state' name="state">
 		<option value="<?=$currentuser['state']?>" selected="selected"><?=$currentuser['state']?></option>
 		<option value="AL">Alabama</option>
 		<option value="AK">Alaska</option>
@@ -89,7 +89,7 @@
 		<option value="WI">Wisconsin</option>
 		<option value="WY">Wyoming</option>
 	</select></p>
-	<input type='submit'value='Update Profile'/>
+	<input type='submit' value='Update Profile'/>
 	</fieldset>
 </form>
 <?php endforeach; ?>
