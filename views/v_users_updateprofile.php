@@ -30,7 +30,7 @@
 			 <input type="radio" name="married" value='NO_ANSWER' <?if($currentuser['married']=='NO_ANSWER'):?>checked<?php endif; ?>>Prefer not to say<br/>
 	City: <input type='text' name='city' value='<?=$currentuser['city']?>'/>
 	State: <select name="state">
-		<option value="" selected="selected"><?=$currentuser['state']?></option>
+		<option value="<?=$currentuser['state']?>" selected="selected"><?=$currentuser['state']?></option>
 		<option value="AL">Alabama</option>
 		<option value="AK">Alaska</option>
 		<option value="AZ">Arizona</option>

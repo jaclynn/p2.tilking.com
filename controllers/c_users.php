@@ -176,6 +176,7 @@ class users_controller extends base_controller {
 	    # Render template
 	    echo $this->template;
 	}
+	
 	public function p_updateprofile() {
 		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 						
@@ -194,7 +195,7 @@ class users_controller extends base_controller {
 	
 	public function p_setavatar() {
 		
-		$allowedExts = array("gif", "jpeg", "jpg", "png");
+		$allowedExts = array("gif", "jpg", "png");
 		
 		$temp = explode(".", $_FILES["avatar"]["name"]);
 		$extension = end($temp);
@@ -226,10 +227,37 @@ class users_controller extends base_controller {
 		      }
 		    else
 		      {
-		      move_uploaded_file($_FILES["avatar"]["tmp_name"],
-		      APP_PATH.'uploads/avatars/'.$_FILES["avatar"]["name"]);
+		      copy($_FILES["avatar"]["tmp_name"],
+		      APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
 		      //echo "Stored in: " . APP_PATH.'uploads/avatars/'. $_FILES["avatar"]["name"];
+		      switch ($extension) {
+				    case 'png':
+				        $image = imagecreatefrompng(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
+				        break;
+				    case 'jpg':
+				        $image = imagecreatefromjpeg(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
+				        break;
+				    case 'gif':
+				        $image = imagecreatefromgif(APP_PATH.'uploads/avatars/profpic'.$this->user->user_id.'.'.$extension);
+				        break;
+				}
+		      $oldw = imagesx($image);
+		      $oldh = imagesy($image);
+		      $newimage = imagecreatetruecolor(200,200);
+		      imagecopyresampled($newimage, $image, 0, 0, 0, 0, 200, 200, $oldw, $oldh);
 		      
+		      
+		      switch ($extension) {
+				    case 'png':
+				        imagepng($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				        break;
+				    case 'jpg':
+				        imagejpeg($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				        break;
+				    case 'gif':
+				        imagegif($newimage, APP_PATH.'uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
+				        break;
+				}
 		      }
 		    }
 		  }
@@ -237,7 +265,7 @@ class users_controller extends base_controller {
 		  {
 		  Router::redirect("/users/updateprofile/error");
 		  }
-		  $data = Array("avatar" => '/uploads/avatars/'.$_FILES["avatar"]["name"]);
+		  $data = Array("avatar" => '/uploads/avatars/profpic_small'.$this->user->user_id.'.'.$extension);
 		  DB::instance(DB_NAME)->update("profiles", $data, "WHERE user_id = '".$this->user->user_id."'");
 		  Router::redirect("/users/updateprofile");
 		//file_put_contents(APP_PATH.AVATAR_PATH.$_POST['avatar'], )
