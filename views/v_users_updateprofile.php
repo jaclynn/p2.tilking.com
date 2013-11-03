@@ -26,12 +26,12 @@
 	<form method='POST' action='/users/p_updateprofile'>
 	<fieldset>
 	<legend>Profile Data:</legend>
-	<p>Last Modified: <time datetime="<?=Time::display($currentuser['modified'],'Y-m-d G:i')?>"/>
-        <?=Time::display($currentuser['modified'])?></p>
+	<p>Last Modified: <time datetime="<?=Time::display($currentuser['modified'],'Y-m-d G:i')?>">
+        <?=Time::display($currentuser['modified'])?></time></p>
 	<p><label class="field" for="dob">Date of Birth:</label><input type='date' id='dob' name='dob' value='<?=$currentuser['dob']?>'/></p>
 	<p><label class="field" for="gender">Gender:</label><input type='radio' id='gender' name='gender' value='MALE' <?if($currentuser['gender']=='MALE'):?>checked<?php endif; ?>>Male
-	        <input type="radio" id='gender' name="gender1" value='FEMALE' <?if($currentuser['gender']=='FEMALE'):?>checked<?php endif; ?>>Female</p>
-	<p><label class="field" for="married">Married:</label><input type='radio' name='married' value='YES' <?if($currentuser['married']=='YES'):?>checked<?php endif; ?>>Yes
+	        <input type="radio" id='gender1' name="gender1" value='FEMALE' <?if($currentuser['gender']=='FEMALE'):?>checked<?php endif; ?>>Female</p>
+	<p><label class="field" for="married">Married:</label><input type='radio' id='married' name='married' value='YES' <?if($currentuser['married']=='YES'):?>checked<?php endif; ?>>Yes
 			 <input type="radio" id='married1' name="married" value='NO' <?if($currentuser['married']=='NO'):?>checked<?php endif; ?>>No
 			 <input type="radio" id='married2' name="married" value='NO_ANSWER' <?if($currentuser['married']=='NO_ANSWER'):?>checked<?php endif; ?>>Prefer not to say</p>
 	<p><label class="field" for="city">City:</label><input type='text' id='city' name='city' value='<?=$currentuser['city']?>'/></p>

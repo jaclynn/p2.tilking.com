@@ -37,7 +37,7 @@ class posts_controller extends base_controller {
 	
 	    # Pass data to the View
 	    $this->template->content->posts = $posts;
-	    $this->template->content->title = "Posts";
+	    $this->template->title = "Posts";
 	
 	    # Render the View
 	    echo $this->template;
