@@ -6,7 +6,9 @@
 <img src='<?=$currentuser['avatar']?>' /><br/>
 	<?=$user->first_name?>&#160;<?=$user->last_name?><br/>
 	<a href="mailto:<?=$user->email?>"><?=$user->email?></a><br/><br/><br/>
-	<a href="/users/updateprofile">Update Profile Info</a>
+	<?php if($user->user_id==$currentuser['user_id']):?>
+	<a href="/users/updateprofile"><img src="/images/updateprofile.png" alt="Register"/></a>
+	<?php endif; ?>
 	<br/><br/>
 
 <div class="contentside">

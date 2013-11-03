@@ -22,7 +22,9 @@
         <?php if($user): ?>
 
             <a href='/users/logout'>Logout</a>&#160;|&#160;
-            <a href='/users/profile'>Profile</a>
+            <a href='/users/profile'>My Profile</a>&#160;|&#160;
+            <a href='/posts/users'>Show Users</a>&#160;|&#160;
+            <a href='/posts/index'>Show Posts</a>
 
         <!-- Menu options for users who are not logged in -->
         <?php else: ?>

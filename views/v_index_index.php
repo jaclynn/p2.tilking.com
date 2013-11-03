@@ -14,3 +14,7 @@
 <a href="/users/logout"><img src="/images/logout.png" alt="Login"/></a>
 
 <?php endif ?>
+
+<h2>+1 Features:</h2>
+<h4>User profile information is accessible via Show Users</h4>
+<h4>Profile pictures can be uploaded via Update Profile</h4>
