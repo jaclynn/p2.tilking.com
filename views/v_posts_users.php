@@ -9,11 +9,11 @@
 	
     <!-- If there exists a connection with this user, show a unfollow link -->
     <?php if(isset($connections[$currentuser['user_id']])): ?>
-        <a href='/posts/unfollow/<?=$currentuser['user_id']?>'>Unfollow</a>
+        <a class="follow" href='/posts/unfollow/<?=$currentuser['user_id']?>'>Unfollow</a>
 
     <!-- Otherwise, show the follow link -->
     <?php else: ?>
-        <a href='/posts/follow/<?=$currentuser['user_id']?>'>Follow</a>
+        <a class="follow" href='/posts/follow/<?=$currentuser['user_id']?>'>Follow</a>
     <?php endif; ?><br/><br/>
 <?php endif;?>
     

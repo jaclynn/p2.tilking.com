@@ -62,7 +62,12 @@ class users_controller extends base_controller {
 					
 	            DB::instance(DB_NAME)->insert_row('profiles', $newprofile);
 	            # Send them to the login page
-	           
+	            
+	            $initialfollowerentry = array('user_id' => $userid,
+	            							  'created' => $_POST['created']);
+	            							  
+	            DB::instance(DB_NAME)->insert_row('users_users', $initialfollowerentry);
+	            							  					   
 				Router::redirect('/users/login');
             }
             
