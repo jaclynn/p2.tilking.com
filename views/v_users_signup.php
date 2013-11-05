@@ -1,10 +1,15 @@
 <h2>Sign up for an account</h2>
 <?php if(isset($error)): ?>
         <div class='error'>
-            Passwords must match.
+            <?php if($error=='duperror'): ?>
+            That email address is already in use.
+            <?php endif;?>
+            <?php if($error=='passerror'): ?>
+            Your passwords do not match.
+			<?php endif;?>
         </div>
-        <br>
-    <?php endif; ?>
+<?php endif; ?>
+
 <form method='POST' action='/users/p_signup'>
 <fieldset>
 		<legend>Enter your credentials</legend>    

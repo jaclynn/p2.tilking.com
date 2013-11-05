@@ -16,21 +16,28 @@ class users_controller extends base_controller {
        $this->template->title = "Sign Up";
        $this->template->content->error = $error;
        
+       
        # Render the view
        echo $this->template;
        
     }
+
     
     public function p_signup() {
                         
             $_POST = DB::instance(DB_NAME)->sanitize($_POST);
-            
-
+			$e = 'SELECT email
+                    	FROM users
+                        WHERE email="'.$_POST['email'].'"';
+            $testifemailexists = DB::instance(DB_NAME)->select_field($e);            
             
             if ($_POST['password']!= $_POST['pass2'])
 			{
-				
-				Router::redirect("/users/signup/error");
+				Router::redirect("/users/signup/passerror");
+			}
+			elseif ($testifemailexists!=NULL) 
+			{
+				Router::redirect("/users/signup/duperror");
 			}
 			else {
 			
