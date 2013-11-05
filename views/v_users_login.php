@@ -9,8 +9,8 @@
     <?php endif; ?>
 	<fieldset>
 		<legend>Enter your credentials</legend>
-		<p><label class="field" for="email">Email:</label> <input type='text' id='email' name='email'/></p>
-		<p><label class="field" for="password">Pasword:</label> <input type='password' id='password' name='password'/></p>
+		<p><label class="field" for="email">Email:</label> <input type='email' id='email' name='email'/></p>
+		<p><label class="field" for="password">Password:</label> <input type='password' id='password' name='password'/></p>
 		
 		<input type='submit' value='Login'/>
 	</fieldset>
